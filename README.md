@@ -1,5 +1,7 @@
 ## VPC
 
+[![Build Status](https://travis-ci.com/telia-oss/terraform-aws-vpc.svg?branch=master)](https://travis-ci.com/telia-oss/terraform-aws-vpc)
+
 This is a module which simplifies setting up a new VPC and getting it into a useful state:
 
 - Creates one public subnet per availability zone (with a shared route table and internet gateway).
