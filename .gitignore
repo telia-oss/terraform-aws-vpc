@@ -2,3 +2,9 @@
 **/.terraform
 **/*.tfstate*
 crash.log
+
+#InteliJ IDE
+.idea/
+
+#Mac files
+.DS_Store
