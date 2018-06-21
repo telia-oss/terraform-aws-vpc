@@ -25,3 +25,8 @@ variable "tags" {
   type        = "map"
   default     = {}
 }
+
+variable "create_nat_gateways" {
+  description = "Optional:  If this is set to false NAT gateways (which cost $) will not be created and the private subnets will only route trafffic to the internet via the egress only gateway(no cost) - Egress only gateways only works for IPv6)"
+  default     = "true"
+}
