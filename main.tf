@@ -17,7 +17,7 @@ resource "aws_vpc" "main" {
   instance_tenancy                 = "default"
   enable_dns_support               = "true"
   enable_dns_hostnames             = "${var.enable_dns_hostnames}"
-  assign_generated_ipv6_cidr_block = true
+  assign_generated_ipv6_cidr_block = "${var.assign_generated_ipv6_cidr_block}"
 
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}-vpc"))}"
 }
@@ -58,7 +58,7 @@ resource "aws_subnet" "public" {
   count                           = "${local.az_count}"
   vpc_id                          = "${aws_vpc.main.id}"
   cidr_block                      = "${cidrsubnet(var.cidr_block, 4, count.index)}"
-  ipv6_cidr_block                 = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index)}"
+  ipv6_cidr_block                 = "${var.assign_generated_ipv6_cidr_block == "true" ? "$(aws_vpc.main.ipv6_cidr_block, 8, count.index)" : ""}"
   availability_zone               = "${element(data.aws_availability_zones.main.names, count.index)}"
   map_public_ip_on_launch         = "true"
   assign_ipv6_address_on_creation = "true"
@@ -113,7 +113,7 @@ resource "aws_subnet" "private" {
   count                           = "${local.private_count}"
   vpc_id                          = "${aws_vpc.main.id}"
   cidr_block                      = "${cidrsubnet(var.cidr_block, 4, local.az_count + count.index)}"
-  ipv6_cidr_block                 = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, local.az_count + count.index)}"
+  ipv6_cidr_block                 = "${var.assign_generated_ipv6_cidr_block == "true" ? "$(aws_vpc.main.ipv6_cidr_block, 8, count.index)" : ""}"
   availability_zone               = "${element(data.aws_availability_zones.main.names, count.index)}"
   map_public_ip_on_launch         = "false"
   assign_ipv6_address_on_creation = "true"
