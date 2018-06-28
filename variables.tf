@@ -25,6 +25,11 @@ variable "private_subnet_count" {
   default     = "0"
 }
 
+variable "assign_generated_ipv6_cidr_block" {
+  description = "Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC."
+  default     = "false"
+}
+
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = "map"
