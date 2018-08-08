@@ -63,7 +63,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch         = "true"
   assign_ipv6_address_on_creation = "true"
 
-  tags = "${merge(var.tags, map("Name", "${var.name_prefix}-public-subnet-${count.index + 1}"))}"
+  tags = "${merge(var.tags, map("Name", "${var.name_prefix}-public-subnet-${count.index + 1}", "type", "public"))}"
 }
 
 resource "aws_route_table_association" "public" {
@@ -118,7 +118,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch         = "false"
   assign_ipv6_address_on_creation = "true"
 
-  tags = "${merge(var.tags, map("Name", "${var.name_prefix}-private-subnet-${count.index + 1}"))}"
+  tags = "${merge(var.tags, map("Name", "${var.name_prefix}-private-subnet-${count.index + 1}", "type", "private"))}"
 }
 
 resource "aws_route_table_association" "private" {
