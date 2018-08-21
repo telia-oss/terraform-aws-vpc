@@ -4,9 +4,9 @@
 data "aws_availability_zones" "main" {}
 
 locals {
-  az_count                = "${length(data.aws_availability_zones.main.names)}"
-  public_count            = "${var.create_public_subnets == "true"? local.az_count : 0}"
-  shall_i_create_public   = "${var.create_public_subnets == "true"? 1 : 0}"
+  az_count              = "${length(data.aws_availability_zones.main.names)}"
+  public_count          = "${var.create_public_subnets == "true"? local.az_count : 0}"
+  shall_i_create_public = "${var.create_public_subnets == "true"? 1 : 0}"
 
   private_count     = "${min(length(data.aws_availability_zones.main.names), var.private_subnet_count)}"
   nat_gateway_count = "${var.create_nat_gateways == "true"? min(length(data.aws_availability_zones.main.names),var.private_subnet_count) * local.shall_i_create_public : 0 }"
@@ -89,7 +89,7 @@ resource "aws_eip" "private" {
 
 resource "aws_nat_gateway" "private" {
   depends_on    = ["aws_internet_gateway.public", "aws_eip.private"]
-  count = "${local.nat_gateway_count}"
+  count         = "${local.nat_gateway_count}"
   allocation_id = "${element(aws_eip.private.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
 

@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 module "vpc1" {
-  source               = "../../"
-  name_prefix          = "example1"
-  cidr_block           = "10.8.0.0/16"
-  private_subnet_count = "2"
+  source                = "../../"
+  name_prefix           = "example1"
+  cidr_block            = "10.8.0.0/16"
+  private_subnet_count  = "2"
   create_public_subnets = "false"
 
   enable_dns_hostnames = "true"
@@ -18,10 +18,10 @@ module "vpc1" {
 }
 
 module "vpc2" {
-  source               = "../../"
-  name_prefix          = "example2"
-  cidr_block           = "10.9.0.0/16"
-  private_subnet_count = "3"
+  source                = "../../"
+  name_prefix           = "example2"
+  cidr_block            = "10.9.0.0/16"
+  private_subnet_count  = "3"
   create_public_subnets = "true"
 
   enable_dns_hostnames = "true"
@@ -31,6 +31,7 @@ module "vpc2" {
     terraform   = "True"
   }
 }
+
 output "vpc_id1" {
   value = "${module.vpc1.vpc_id}"
 }
