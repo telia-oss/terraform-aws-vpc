@@ -20,6 +20,11 @@ variable "enable_dns_hostnames" {
   default     = "false"
 }
 
+variable "create_public_subnets" {
+  description = "If you do not want to create public subnets set this to false. This will also disable the creation of NAT gateways"
+  default     = "true"
+}
+
 variable "private_subnet_count" {
   description = "Number of private subnets to provision (will not exceed the number of AZ's in the region)."
   default     = "0"
