@@ -4,9 +4,12 @@
 data "aws_availability_zones" "main" {}
 
 locals {
-  az_count          = "${length(data.aws_availability_zones.main.names)}"
+  az_count                = "${length(data.aws_availability_zones.main.names)}"
+  public_count            = "${var.create_public_subnets == "true"? local.az_count : 0}"
+  shall_i_create_public   = "${var.create_public_subnets == "true"? 1 : 0}"
+
   private_count     = "${min(length(data.aws_availability_zones.main.names), var.private_subnet_count)}"
-  nat_gateway_count = "${var.create_nat_gateways == "true"? min(length(data.aws_availability_zones.main.names),var.private_subnet_count) : 0 }"
+  nat_gateway_count = "${var.create_nat_gateways == "true"? min(length(data.aws_availability_zones.main.names),var.private_subnet_count) * local.shall_i_create_public : 0 }"
 }
 
 # NOTE: depends_on is added for the vpc because terraform sometimes
@@ -23,6 +26,8 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_internet_gateway" "public" {
+  count = "${min(local.public_count,1)}"
+
   depends_on = ["aws_vpc.main"]
   vpc_id     = "${aws_vpc.main.id}"
 
@@ -34,6 +39,8 @@ resource "aws_egress_only_internet_gateway" "outbound" {
 }
 
 resource "aws_route_table" "public" {
+  count = "${min(local.public_count,1)}"
+
   depends_on = ["aws_vpc.main"]
   vpc_id     = "${aws_vpc.main.id}"
 
@@ -41,6 +48,8 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "public" {
+  count = "${min(local.public_count,1)}"
+
   depends_on             = ["aws_internet_gateway.public", "aws_route_table.public"]
   route_table_id         = "${aws_route_table.public.id}"
   gateway_id             = "${aws_internet_gateway.public.id}"
@@ -48,6 +57,8 @@ resource "aws_route" "public" {
 }
 
 resource "aws_route" "ipv6-public" {
+  count = "${min(local.public_count,1)}"
+
   depends_on                  = ["aws_internet_gateway.public", "aws_route_table.public"]
   route_table_id              = "${aws_route_table.public.id}"
   gateway_id                  = "${aws_internet_gateway.public.id}"
@@ -55,7 +66,7 @@ resource "aws_route" "ipv6-public" {
 }
 
 resource "aws_subnet" "public" {
-  count                           = "${local.az_count}"
+  count                           = "${local.public_count}"
   vpc_id                          = "${aws_vpc.main.id}"
   cidr_block                      = "${cidrsubnet(var.cidr_block, 4, count.index)}"
   ipv6_cidr_block                 = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index)}"
@@ -67,7 +78,7 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count          = "${local.az_count}"
+  count          = "${local.public_count}"
   subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
   route_table_id = "${aws_route_table.public.id}"
 }
@@ -78,7 +89,7 @@ resource "aws_eip" "private" {
 
 resource "aws_nat_gateway" "private" {
   depends_on    = ["aws_internet_gateway.public", "aws_eip.private"]
-  count         = "${local.nat_gateway_count}"
+  count = "${local.nat_gateway_count}"
   allocation_id = "${element(aws_eip.private.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
 

@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-west-2"
 }
 
 module "vpc" {
@@ -7,6 +7,8 @@ module "vpc" {
   name_prefix          = "example"
   cidr_block           = "10.8.0.0/16"
   private_subnet_count = "2"
+  create_public_subnets = "false"
+
   enable_dns_hostnames = "true"
 
   tags {

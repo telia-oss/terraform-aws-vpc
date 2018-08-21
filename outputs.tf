@@ -18,7 +18,8 @@ output "private_subnet_ids" {
 
 output "public_subnets_route_table_id" {
   description = "The ID of the routing table for the public subnets."
-  value       = "${aws_route_table.public.id}"
+#  Workaround for empty list is empty
+  value = "${element(concat(aws_route_table.public.*.id, list("")), 0)}"
 }
 
 output "private_subnets_route_table_ids" {
