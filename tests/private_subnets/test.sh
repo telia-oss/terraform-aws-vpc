@@ -1,5 +1,17 @@
 #!/bin/sh
 set -eo pipefail
+
+# for integers comparisons: checkCounts <testValue> <expectedValue> <testName>
+checkCounts() {
+ if [ $1 -eq $2 ]
+ then
+   echo "√ $3"
+ else
+   echo "✗ $3"
+   tests_failed=$((tests_failed+1))
+fi
+}
+
 tests_failed=0
 cd terraform
 terraform init
@@ -10,21 +22,7 @@ natgateway_count=`aws ec2 describe-nat-gateways | jq --arg VPC_ID "$VPC_ID" '.Na
 
 terraform destroy --auto-approve
 
-if [ $subnet_count -eq 6 ]
- then
-   echo "√ Expected # of Subnets"
- else
-   echo "✗ Expected # of Subnets"
-   tests_failed=$((tests_failed+1))
-fi
-
-if [ $natgateway_count -eq 3 ]
- then
-   echo "√ Expected # of Nat Gateways"
- else
-   echo "✗ Expected # of Nat Gateways"
-   tests_failed=$((tests_failed+1))
-fi
-
+checkCounts $subnet_count 6 "Expected # of Subnets"
+checkCounts $natgateway_count 3 "Expected # of NAT Gateways"
 
 exit $tests_failed
