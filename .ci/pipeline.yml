@@ -1,0 +1,103 @@
+jobs:
+  - name: test-default
+    plan:
+      - aggregate:
+          get: terraform-aws-vpc
+          trigger: true
+      - task: apply
+        params:
+          directory: default
+          AWS_ACCOUNT_ID: ((telia-divx-xqb-dev-account-id))
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+          KMS_KEY_ID: ((telia-divx-xqb-dev-state-bucket-key))
+        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
+        input_mapping: {source: terraform-aws-vpc}
+      - task: test
+        params:
+          directory: default
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+      - task: destroy
+        params:
+          directory: default
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+
+  - name: test-private-subnets-no-nat
+    plan:
+      - aggregate:
+          get: terraform-aws-vpc
+          trigger: true
+          passed:
+            - test-default
+      - task: apply
+        params:
+          directory: private-subnets-no-nat
+          AWS_ACCOUNT_ID: ((telia-divx-xqb-dev-account-id))
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+          KMS_KEY_ID: ((telia-divx-xqb-dev-state-bucket-key))
+        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
+        input_mapping: {source: terraform-aws-vpc}
+      - task: test
+        params:
+          directory: private-subnets-no-nat
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+      - task: destroy
+        params:
+          directory: private-subnets-no-nat
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+
+  - name: test-private-subnets
+    plan:
+      - aggregate:
+          get: terraform-aws-vpc
+          trigger: true
+          passed:
+            - test-private-subnets-no-nat
+      - task: apply
+        params:
+          directory: private-subnets
+          AWS_ACCOUNT_ID: ((telia-divx-xqb-dev-account-id))
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+          KMS_KEY_ID: ((telia-divx-xqb-dev-state-bucket-key))
+        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
+        input_mapping: {source: terraform-aws-vpc}
+      - task: test
+        params:
+          directory: private-subnets
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+      - task: destroy
+        params:
+          directory: private-subnets
+          AWS_ACCESS_KEY_ID: ((telia-divx-xqb-dev-access-key))
+          AWS_SECRET_ACCESS_KEY: ((telia-divx-xqb-dev-secret-key))
+          AWS_SESSION_TOKEN: ((telia-divx-xqb-dev-session-token))
+        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+
+
+resources:
+  - name: terraform-aws-vpc
+    type: git
+    source:
+      uri: git@github.com:telia-oss/terraform-aws-vpc.git
+      branch: master
+
