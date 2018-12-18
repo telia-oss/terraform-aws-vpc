@@ -16,4 +16,4 @@ inputs:
   - name: secret-source
 
 run:
-  path: source/examples/test/tasks/destroy/task.sh
+  path: secret-source/.ci/tasks/destroy/task.sh
