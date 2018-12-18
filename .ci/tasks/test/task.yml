@@ -16,4 +16,4 @@ inputs:
   - name: terraform-out
 
 run:
-  path: source/examples/test/tasks/test/task.sh
+  path: secret-source/.ci/tasks/test/task.sh
