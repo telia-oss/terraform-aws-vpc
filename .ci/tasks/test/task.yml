@@ -5,6 +5,12 @@ image_resource:
   source:
     repository: teliaoss/concourse-awscli
 
+params:
+  directory:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_SESSION_TOKEN:
+
 inputs:
   - name: secret-source
   - name: terraform-out

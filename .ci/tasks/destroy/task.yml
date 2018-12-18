@@ -6,6 +6,12 @@ image_resource:
     repository: hashicorp/terraform
     tag: "0.11.10"
 
+params:
+  directory:
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+  AWS_SESSION_TOKEN:
+
 inputs:
   - name: secret-source
 
