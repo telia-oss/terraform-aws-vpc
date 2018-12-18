@@ -99,6 +99,6 @@ resources:
     type: git
     source:
       uri: git@github.com:telia-oss/terraform-aws-vpc.git
-      branch: master
+      branch: fixpath
       private_key: ((aws-common-services-deploy-key))
 
