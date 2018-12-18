@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eo pipefail
 
-# for integer comparisons: checkCounts <testValue> <expectedValue> <testName>
-checkCounts() {
+# for integer comparisons: check_counts <testValue> <expectedValue> <testName>
+check_counts() {
  if [ $1 -eq $2 ]
  then
    echo "√ $3"
@@ -20,5 +20,5 @@ if [ $1 == 'ci' ]
 fi
 
 subnet_count=`aws ec2 describe-subnets | jq --arg VPC_ID "$VPC_ID" '.Subnets[]| select (.VpcId==$VPC_ID)' | jq -s length`
-checkCounts $subnet_count 3 "Expected # of Subnets"
+check_counts $subnet_count 3 "Expected # of Subnets"
 exit $tests_failed

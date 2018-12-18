@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eo pipefail
 
-# for integer comparisons: checkCounts <testValue> <expectedValue> <testName>
-checkCounts() {
+# for integer comparisons: check_counts <testValue> <expectedValue> <testName>
+check_counts() {
  if [ $1 -eq $2 ]
  then
    echo "√ $3"
@@ -23,8 +23,8 @@ subnet_count=`aws ec2 describe-subnets | jq --arg VPC_ID "$VPC_ID" '.Subnets[]| 
 natgateway_count=`aws ec2 describe-nat-gateways | jq --arg VPC_ID "$VPC_ID" '.NatGateways[]| select (.VpcId==$VPC_ID)'| jq -s length`
 egress_only_igw_count=`aws ec2 describe-egress-only-internet-gateways | jq --arg VPC_ID "$VPC_ID" '.EgressOnlyInternetGateways[]| select (.Attachments[].VpcId==$VPC_ID)'| jq -s length`
 
-checkCounts $subnet_count 6 "Expected # of Subnets"
-checkCounts $natgateway_count 0 "Expected # of NAT Gateways"
-checkCounts $egress_only_igw_count 1 "Expected # of Internet Only Egress Gateways"
+check_counts $subnet_count 6 "Expected # of Subnets"
+check_counts $natgateway_count 0 "Expected # of NAT Gateways"
+check_counts $egress_only_igw_count 1 "Expected # of Internet Only Egress Gateways"
 
 exit $tests_failed

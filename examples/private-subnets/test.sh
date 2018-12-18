@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eo pipefail
 
-# for integer comparisons: checkCounts <testValue> <expectedValue> <testName>
-checkCounts() {
+# for integer comparisons: check_counts <testValue> <expectedValue> <testName>
+check_counts() {
  if [ $1 -eq $2 ]
  then
    echo "√ $3"
@@ -22,7 +22,7 @@ fi
 subnet_count=`aws ec2 describe-subnets | jq --arg VPC_ID "$VPC_ID" '.Subnets[]| select (.VpcId==$VPC_ID)' | jq -s length`
 natgateway_count=`aws ec2 describe-nat-gateways | jq --arg VPC_ID "$VPC_ID" '.NatGateways[]| select (.VpcId==$VPC_ID)'| jq -s length`
 
-checkCounts $subnet_count 6 "Expected # of Subnets"
-checkCounts $natgateway_count 3 "Expected # of NAT Gateways"
+check_counts $subnet_count 6 "Expected # of Subnets"
+check_counts $natgateway_count 3 "Expected # of NAT Gateways"
 
 exit $tests_failed
