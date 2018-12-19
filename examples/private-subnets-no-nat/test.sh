@@ -15,6 +15,7 @@ tests_failed=0
 if [ $1 == 'ci' ]
   then
   VPC_ID=`cat terraform-out/terraform-out.json | jq -r '.vpc_id.value'`
+  export AWS_DEFAULT_REGION=eu-west-1
   else
   VPC_ID=`terraform output -json | jq -r '.vpc_id.value'`
 fi
