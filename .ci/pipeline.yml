@@ -2,7 +2,7 @@ jobs:
   - name: test-default
     plan:
       - aggregate:
-        - get: terraform-aws-vpc
+        - get: this-module
           trigger: true
       - task: apply
         params:
@@ -12,27 +12,27 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
           KMS_KEY_ID: ((telia-divx-common-services-stage-state-bucket-key))
-        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
-        input_mapping: {source: terraform-aws-vpc}
+        file: this-module/.ci/tasks/apply/task.yml
+        input_mapping: {source: this-module}
       - task: test
         params:
           directory: default
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+        file: this-module/.ci/tasks/test/task.yml
       - task: destroy
         params:
           directory: default
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+        file: this-module/.ci/tasks/destroy/task.yml
 
   - name: test-private-subnets-no-nat
     plan:
       - aggregate:
-        - get: terraform-aws-vpc
+        - get: this-module
           trigger: true
           passed:
             - test-default
@@ -44,27 +44,27 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
           KMS_KEY_ID: ((telia-divx-common-services-stage-state-bucket-key))
-        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
-        input_mapping: {source: terraform-aws-vpc}
+        file: this-module/.ci/tasks/apply/task.yml
+        input_mapping: {source: this-module}
       - task: test
         params:
           directory: private-subnets-no-nat
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+        file: this-module/.ci/tasks/test/task.yml
       - task: destroy
         params:
           directory: private-subnets-no-nat
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+        file: this-module/.ci/tasks/destroy/task.yml
 
   - name: test-private-subnets
     plan:
       - aggregate:
-        - get: terraform-aws-vpc
+        - get: this-module
           trigger: true
           passed:
             - test-private-subnets-no-nat
@@ -76,29 +76,29 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
           KMS_KEY_ID: ((telia-divx-common-services-stage-state-bucket-key))
-        file: terraform-aws-vpc/.ci/tasks/apply/task.yml
-        input_mapping: {source: terraform-aws-vpc}
+        file: this-module/.ci/tasks/apply/task.yml
+        input_mapping: {source: this-module}
       - task: test
         params:
           directory: private-subnets
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/test/task.yml
+        file: this-module/.ci/tasks/test/task.yml
       - task: destroy
         params:
           directory: private-subnets
           AWS_ACCESS_KEY_ID: ((telia-divx-common-services-stage-access-key))
           AWS_SECRET_ACCESS_KEY: ((telia-divx-common-services-stage-secret-key))
           AWS_SESSION_TOKEN: ((telia-divx-common-services-stage-session-token))
-        file: terraform-aws-vpc/.ci/tasks/destroy/task.yml
+        file: this-module/.ci/tasks/destroy/task.yml
 
 
 resources:
-  - name: terraform-aws-vpc
+  - name: this-module
     type: git
     source:
-      uri: git@github.com:telia-oss/terraform-aws-vpc.git
+      uri: git@github.com:telia-oss/this-module.git
       branch: master
       private_key: ((aws-common-services-deploy-key))
 
