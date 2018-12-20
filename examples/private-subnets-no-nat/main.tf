@@ -20,7 +20,7 @@ provider "aws" {
 
 module "vpc" {
   source               = "../../"
-  name_prefix          = "test-no-nat"
+  name_prefix          = "vpc-test-no-nat"
   private_subnet_count = "3"
   create_nat_gateways  = "false"
 }

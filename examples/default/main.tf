@@ -20,7 +20,7 @@ provider "aws" {
 
 module "vpc" {
   source      = "../../"
-  name_prefix = "test-default"
+  name_prefix = "vpc-test-default"
 }
 
 output "vpc_id" {

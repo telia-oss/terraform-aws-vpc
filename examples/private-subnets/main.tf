@@ -20,7 +20,7 @@ provider "aws" {
 
 module "vpc" {
   source               = "../../"
-  name_prefix          = "test-private-subnets"
+  name_prefix          = "vpc-test-private-subnets"
   private_subnet_count = "3"
 }
 

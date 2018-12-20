@@ -11,15 +11,13 @@ check_counts() {
    tests_failed=$((tests_failed+1))
 fi
 }
+
 tests_failed=0
-if [ $1 == 'ci' ]
-  then
-  VPC_ID=`cat terraform-out/terraform-out.json | jq -r '.vpc_id.value'`
-  export AWS_DEFAULT_REGION=eu-west-1
-  else
-  VPC_ID=`terraform output -json | jq -r '.vpc_id.value'`
-fi
+
+VPC_ID=`cat terraform-out/terraform-out.json | jq -r '.vpc_id.value'`
+export AWS_DEFAULT_REGION=eu-west-1
 
 subnet_count=`aws ec2 describe-subnets | jq --arg VPC_ID "$VPC_ID" '.Subnets[]| select (.VpcId==$VPC_ID)' | jq -s length`
 check_counts $subnet_count 3 "Expected # of Subnets"
+
 exit $tests_failed
