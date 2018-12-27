@@ -98,7 +98,7 @@ resources:
   - name: this-module
     type: git
     source:
-      uri: git@github.com:telia-oss/this-module.git
+      uri: git@github.com:telia-oss/terraform-aws-vpc.git
       branch: master
       private_key: ((aws-common-services-deploy-key))
 
