@@ -1,5 +1,5 @@
 terraform {
-  required_version = "0.11.10"
+  required_version = "0.11.11"
 
   backend "s3" {
     key            = "terraform-modules/development/terraform-aws-vpc/private-subnets-no-nat.tfstate"
@@ -20,7 +20,7 @@ provider "aws" {
 
 module "vpc" {
   source               = "../../"
-  name_prefix          = "test-no-nat"
+  name_prefix          = "vpc-test-no-nat"
   private_subnet_count = "3"
   create_nat_gateways  = "false"
 }

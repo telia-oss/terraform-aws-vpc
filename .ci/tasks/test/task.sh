@@ -1,3 +1,3 @@
 #!/bin/sh
 export DIR="${PWD}"
-${DIR}/secret-source/examples/${directory}/test.sh ci
+${DIR}/secret-source/examples/${directory}/test.sh
