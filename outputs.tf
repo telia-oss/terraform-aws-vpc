@@ -25,3 +25,8 @@ output "private_subnets_route_table_ids" {
   description = "The IDs of the routing tables for the private subnets."
   value       = "${aws_route_table.private.*.id}"
 }
+
+output "main_route_table_id" {
+  description = "The ID of the main route table."
+  value       = "${aws_vpc.main.main_route_table_id}"
+}
