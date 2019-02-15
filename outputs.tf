@@ -30,3 +30,8 @@ output "main_route_table_id" {
   description = "The ID of the main route table."
   value       = "${aws_vpc.main.main_route_table_id}"
 }
+
+output "cidr_block" {
+  description = "The cidr_block of the VPC."
+  value       = "${aws_vpc.main.cidr_block}"
+}
