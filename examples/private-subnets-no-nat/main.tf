@@ -1,5 +1,5 @@
 terraform {
-  required_version = "0.11.11"
+  required_version = ">= 0.12"
 
   backend "s3" {
     key            = "terraform-modules/development/terraform-aws-vpc/private-subnets-no-nat.tfstate"
@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  version             = "1.52.0"
+  version             = ">= 2.17"
   region              = "eu-west-1"
   allowed_account_ids = ["<test-account-id>"]
 }
@@ -26,9 +26,10 @@ module "vpc" {
 }
 
 output "vpc_id" {
-  value = "${module.vpc.vpc_id}"
+  value = module.vpc.vpc_id
 }
 
 output "subnet_ids" {
-  value = "${module.vpc.public_subnet_ids}"
+  value = module.vpc.public_subnet_ids
 }
+
