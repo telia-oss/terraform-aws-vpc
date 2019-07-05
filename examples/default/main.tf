@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 0.12"
+
   backend "s3" {
     key            = "terraform-modules/development/terraform-aws-vpc/default.tfstate"
     bucket         = "<test-account-id>-terraform-state"
