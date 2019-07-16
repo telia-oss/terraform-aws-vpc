@@ -30,13 +30,40 @@ func TestDefaultExample(t *testing.T) {
 					"10.0.16.0/20": true,
 					"10.0.32.0/20": true,
 				},
+				NATGatewayCount: 0,
 				AvailabilityZones: []string{
 					"eu-west-1a",
 					"eu-west-1b",
 					"eu-west-1c",
 				},
-				NATGatewayCount: 0,
-				IPV6Enabled:     true,
+				IPV6Enabled: true,
+				Tags: map[string]string{
+					"terraform":   "True",
+					"environment": "dev",
+				},
+			},
+		},
+		{
+			description: "complete example",
+			directory:   "../examples/complete",
+			name:        fmt.Sprintf("vpc-complete-test-%s", random.UniqueId()),
+			region:      "eu-west-1",
+			expected: vpc.Expectations{
+				CIDRBlock: "10.100.0.0/16",
+				SubnetCIDRBlocks: map[string]bool{
+					"10.100.0.0/20":  true,
+					"10.100.16.0/20": true,
+					"10.100.32.0/20": true,
+					"10.100.48.0/20": false,
+					"10.100.64.0/20": false,
+				},
+				NATGatewayCount: 2,
+				AvailabilityZones: []string{
+					"eu-west-1a",
+					"eu-west-1b",
+					"eu-west-1c",
+				},
+				IPV6Enabled: true,
 				Tags: map[string]string{
 					"terraform":   "True",
 					"environment": "dev",

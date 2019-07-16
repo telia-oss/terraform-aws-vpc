@@ -9,7 +9,7 @@ locals {
     length(data.aws_availability_zones.main.names),
     var.private_subnet_count,
   )
-  nat_gateway_count = var.create_nat_gateways == "true" ? min(
+  nat_gateway_count = var.create_nat_gateways ? min(
     length(data.aws_availability_zones.main.names),
     var.private_subnet_count,
   ) : 0
