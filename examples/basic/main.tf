@@ -9,7 +9,7 @@ provider "aws" {
 
 module "vpc" {
   source      = "../../"
-  name_prefix = "${var.name_prefix}"
+  name_prefix = var.name_prefix
 
   tags = {
     terraform   = "True"
