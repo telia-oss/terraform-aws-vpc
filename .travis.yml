@@ -1,18 +1,20 @@
-dist: trusty
+language: go
 sudo: false
 
-before_install:
-  - curl -fSL "https://releases.hashicorp.com/terraform/0.12.3/terraform_0.12.3_linux_amd64.zip" -o terraform.zip
-  - sudo unzip terraform.zip -d /opt/terraform
-  - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
-  - rm -f terraform.zip
-  - curl -fSL https://github.com/wata727/tflint/releases/download/v0.7.0/tflint_linux_amd64.zip -o tflint.zip
-  - sudo unzip tflint.zip -d /opt/tflint
-  - sudo ln -s /opt/tflint/tflint /usr/bin/tflint
-  - rm -f tflint.zip
+go:
+  - 1.12.x
+
+env:
+  - GO111MODULE=on AWS_REGION=eu-west-1
 
 notifications:
   email: false
 
+before_script:
+  - curl -fSL "https://releases.hashicorp.com/terraform/0.12.3/terraform_0.12.3_linux_amd64.zip" -o terraform.zip
+  - sudo unzip terraform.zip -d /opt/terraform
+  - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
+  - rm -f terraform.zip
+
 script:
-  - make
+  - go get -u -v github.com/go-task/task/v2/cmd/task && task test
