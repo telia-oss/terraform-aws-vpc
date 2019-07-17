@@ -11,7 +11,7 @@ module "vpc" {
   source               = "../../"
   name_prefix          = var.name_prefix
   cidr_block           = "10.100.0.0/16"
-  create_nat_gateways  = true
+  create_nat_gateways  = false
   enable_dns_hostnames = true
   private_subnet_count = 2
 

@@ -12,6 +12,36 @@ variable "cidr_block" {
   default     = "10.0.0.0/16"
 }
 
+variable "availability_zones" {
+  description = "The availability zones to use for the subnets."
+  type        = list(string)
+  default     = []
+}
+
+variable "create_public_subnets" {
+  description = "Flag to create public subnets."
+  type        = bool
+  default     = true
+}
+
+variable "create_private_subnets" {
+  description = "Flag to create private subnets."
+  type        = bool
+  default     = false
+}
+
+variable "public_subnet_cidrs" {
+  description = "A list of CIDR blocks to use for the public subnets."
+  type        = list(string)
+  default     = []
+}
+
+variable "private_subnet_cidrs" {
+  description = "A list of CIDR blocks to use for the private subnets."
+  type        = list(string)
+  default     = []
+}
+
 variable "create_nat_gateways" {
   description = "If this is set to false NAT gateways (which cost $) will not be created and the private subnets will only route trafffic to the internet via the egress only gateway(no cost) - Egress only gateways only work for IPv6)"
   type        = bool
@@ -22,12 +52,6 @@ variable "enable_dns_hostnames" {
   description = "A boolean flag to enable/disable DNS hostnames in the VPC."
   type        = bool
   default     = false
-}
-
-variable "private_subnet_count" {
-  description = "Number of private subnets to provision (will not exceed the number of AZ's in the region)."
-  type        = number
-  default     = 0
 }
 
 variable "tags" {
