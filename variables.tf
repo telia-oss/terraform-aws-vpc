@@ -13,13 +13,13 @@ variable "cidr_block" {
 }
 
 variable "availability_zones" {
-  description = "The availability zones to use for the subnets."
+  description = "The availability zones to use for subnets and resources in the VPC. By default, all AZs in the region will be used."
   type        = list(string)
   default     = []
 }
 
 variable "public_subnet_cidrs" {
-  description = "A list of CIDR blocks to use for the public subnets."
+  description = "A list of CIDR blocks to use for the public subnets. When null, creates a single /20-prefixed subnet per AZ."
   type        = list(string)
   default     = null
 }
