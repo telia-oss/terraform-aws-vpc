@@ -5,8 +5,8 @@ data "aws_availability_zones" "main" {}
 
 locals {
   azs               = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
-  public_cidrs      = length(var.public_subnet_cidrs) > 0 ? var.public_subnet_cidrs : [for i, _ in local.azs : cidrsubnet(var.cidr_block, 4, i) if i <= length(local.azs)]
-  private_cidrs     = length(var.private_subnet_cidrs) > 0 ? var.private_subnet_cidrs : [for i, _ in local.azs : cidrsubnet(var.cidr_block, 4, i + length(local.public_cidrs)) if i <= length(local.azs)]
+  public_cidrs      = coalescelist(var.public_subnet_cidrs, [for i, _ in local.azs : cidrsubnet(var.cidr_block, 4, i)])
+  private_cidrs     = coalescelist(var.private_subnet_cidrs, [for i, _ in local.azs : cidrsubnet(var.cidr_block, 4, i)])
   public_subnets    = var.create_public_subnets ? local.public_cidrs : []
   private_subnets   = var.create_private_subnets ? local.private_cidrs : []
   nat_gateway_count = var.create_nat_gateways && var.create_public_subnets ? length(local.private_subnets) : 0
