@@ -5,7 +5,7 @@ data "aws_availability_zones" "main" {}
 
 locals {
   azs               = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
-  nat_gateway_count = var.create_nat_gateways ? min(length(azs), length(var.public_subnet_cidrs)) : 0
+  nat_gateway_count = var.create_nat_gateways ? min(length(local.azs), length(var.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
 }
 
 resource "aws_vpc" "main" {
