@@ -8,12 +8,17 @@ provider "aws" {
 }
 
 module "vpc" {
-  source               = "../../"
-  name_prefix          = var.name_prefix
-  cidr_block           = "10.100.0.0/16"
-  create_nat_gateways  = false
-  enable_dns_hostnames = true
-  private_subnet_count = 2
+  source                 = "../../"
+  name_prefix            = var.name_prefix
+  cidr_block             = "10.100.0.0/16"
+  create_nat_gateways    = false
+  enable_dns_hostnames   = true
+  create_private_subnets = true
+
+  private_subnet_cidrs = [
+    "10.100.48.0/20",
+    "10.100.64.0/20",
+  ]
 
   tags = {
     terraform   = "True"
