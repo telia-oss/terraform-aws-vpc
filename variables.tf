@@ -18,22 +18,10 @@ variable "availability_zones" {
   default     = []
 }
 
-variable "create_public_subnets" {
-  description = "Flag to create public subnets."
-  type        = bool
-  default     = true
-}
-
-variable "create_private_subnets" {
-  description = "Flag to create private subnets."
-  type        = bool
-  default     = false
-}
-
 variable "public_subnet_cidrs" {
   description = "A list of CIDR blocks to use for the public subnets."
   type        = list(string)
-  default     = []
+  default     = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
 }
 
 variable "private_subnet_cidrs" {
@@ -43,7 +31,7 @@ variable "private_subnet_cidrs" {
 }
 
 variable "create_nat_gateways" {
-  description = "If this is set to false NAT gateways (which cost $) will not be created and the private subnets will only route trafffic to the internet via the egress only gateway(no cost) - Egress only gateways only work for IPv6)"
+  description = "Optionally create NAT gateways (which cost $) to provide internet connectivity to the private subnets."
   type        = bool
   default     = true
 }
