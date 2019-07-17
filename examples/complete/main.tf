@@ -18,7 +18,12 @@ module "vpc" {
     "eu-west-1c",
   ]
 
-  create_private_subnets = true
+  public_subnet_cidrs = [
+    "10.100.0.0/20",
+    "10.100.16.0/20",
+    "10.100.32.0/20",
+  ]
+
   private_subnet_cidrs = [
     "10.100.48.0/20",
     "10.100.64.0/20",
