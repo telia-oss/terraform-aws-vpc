@@ -4,9 +4,10 @@
 
 This is a module which simplifies setting up a new VPC and getting it into a useful state:
 
-- Creates one public subnet per availability zone (with a shared route table and internet gateway) by default.
-- Creates the desired number of private subnets (with one NAT gateway and route table per subnet).
+- Sets up the route tables for the public and private subnets you specify.
 - Enables IPv6 for the VPC and allocates a /64 block for each of the public and private subnets.
+- Creates up an internet gateway and route table for your public subnets.
+- Creates a NAT gateway for your private subnets if desired (requires public subnets).
 - Creates an egress only internet gateway for IPv6 traffic outbound from the private subnets.
 - Adds the tag `type` to each subnet with the value of either `public` or `private`.
 
