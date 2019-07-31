@@ -1,4 +1,4 @@
-package asg
+package module
 
 import (
 	"testing"
@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Expectations for the VPC test suite.
 type Expectations struct {
 	CIDRBlock         string
 	SubnetCIDRBlocks  map[string]bool
@@ -19,7 +18,6 @@ type Expectations struct {
 	Tags              map[string]string
 }
 
-// RunTestSuite runs the test suite against the autoscaling group.
 func RunTestSuite(t *testing.T, vpcID string, region string, expected Expectations) {
 	var (
 		vpc      *ec2.Vpc

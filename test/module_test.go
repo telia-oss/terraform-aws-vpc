@@ -1,4 +1,4 @@
-package asg_test
+package module_test
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestDefaultExample(t *testing.T) {
+func TestModule(t *testing.T) {
 	tests := []struct {
 		description string
 		directory   string
