@@ -24,7 +24,7 @@ func TestModule(t *testing.T) {
 			name:        fmt.Sprintf("vpc-basic-test-%s", random.UniqueId()),
 			region:      "eu-west-1",
 			expected: vpc.Expectations{
-				CIDRBlock: "10.0.0.0/16",
+				CIDRBlock: "10.0.0.0/24",
 				SubnetCIDRBlocks: map[string]bool{
 					"10.0.0.0/26":   true,
 					"10.0.0.64/26":  true,

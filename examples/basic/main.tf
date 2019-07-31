@@ -10,6 +10,7 @@ provider "aws" {
 module "vpc" {
   source      = "../../"
   name_prefix = var.name_prefix
+  cidr_block  = "10.0.0.0/24"
 
   public_subnet_cidrs = [
     "10.0.0.0/26",
