@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	vpc "github.com/telia-oss/terraform-aws-vpc/test"
+	vpc "github.com/telia-oss/terraform-aws-vpc/v3/test"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
