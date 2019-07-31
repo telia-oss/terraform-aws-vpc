@@ -19,9 +19,9 @@ variable "availability_zones" {
 }
 
 variable "public_subnet_cidrs" {
-  description = "A list of CIDR blocks to use for the public subnets. When null, creates a single /20-prefixed subnet per AZ."
+  description = "A list of CIDR blocks to use for the public subnets."
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "private_subnet_cidrs" {

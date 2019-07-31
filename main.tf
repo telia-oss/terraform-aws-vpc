@@ -4,9 +4,8 @@
 data "aws_availability_zones" "main" {}
 
 locals {
-  azs                 = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
-  public_subnet_cidrs = var.public_subnet_cidrs == null ? [for i, _ in local.azs : cidrsubnet(var.cidr_block, 4, i)] : var.public_subnet_cidrs
-  nat_gateway_count   = var.create_nat_gateways ? min(length(local.azs), length(local.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
+  azs               = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
+  nat_gateway_count = var.create_nat_gateways ? min(length(local.azs), length(var.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
 }
 
 resource "aws_vpc" "main" {
@@ -25,7 +24,7 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_internet_gateway" "public" {
-  count      = length(local.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 
@@ -38,13 +37,13 @@ resource "aws_internet_gateway" "public" {
 }
 
 resource "aws_egress_only_internet_gateway" "outbound" {
-  count      = length(local.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 }
 
 resource "aws_route_table" "public" {
-  count      = length(local.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 
@@ -57,7 +56,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "public" {
-  count = length(local.public_subnet_cidrs) > 0 ? 1 : 0
+  count = length(var.public_subnet_cidrs) > 0 ? 1 : 0
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
@@ -68,7 +67,7 @@ resource "aws_route" "public" {
 }
 
 resource "aws_route" "ipv6-public" {
-  count = length(local.public_subnet_cidrs) > 0 ? 1 : 0
+  count = length(var.public_subnet_cidrs) > 0 ? 1 : 0
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
@@ -79,9 +78,9 @@ resource "aws_route" "ipv6-public" {
 }
 
 resource "aws_subnet" "public" {
-  count                           = length(local.public_subnet_cidrs)
+  count                           = length(var.public_subnet_cidrs)
   vpc_id                          = aws_vpc.main.id
-  cidr_block                      = local.public_subnet_cidrs[count.index]
+  cidr_block                      = var.public_subnet_cidrs[count.index]
   ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index)
   availability_zone               = element(local.azs, count.index)
   map_public_ip_on_launch         = true
@@ -97,7 +96,7 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count          = length(local.public_subnet_cidrs)
+  count          = length(var.public_subnet_cidrs)
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public[0].id
 }
@@ -159,7 +158,7 @@ resource "aws_route" "ipv6-private" {
     aws_egress_only_internet_gateway.outbound,
     aws_route_table.private,
   ]
-  count                       = length(local.public_subnet_cidrs) > 0 ? length(var.private_subnet_cidrs) : 0
+  count                       = length(var.public_subnet_cidrs) > 0 ? length(var.private_subnet_cidrs) : 0
   route_table_id              = aws_route_table.private[count.index].id
   egress_only_gateway_id      = aws_egress_only_internet_gateway.outbound[0].id
   destination_ipv6_cidr_block = "::/0"
@@ -169,7 +168,7 @@ resource "aws_subnet" "private" {
   count                           = length(var.private_subnet_cidrs)
   vpc_id                          = aws_vpc.main.id
   cidr_block                      = var.private_subnet_cidrs[count.index]
-  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index + length(local.public_subnet_cidrs))
+  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index + length(var.public_subnet_cidrs))
   availability_zone               = element(local.azs, count.index)
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = true
