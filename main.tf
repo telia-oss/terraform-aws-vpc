@@ -104,6 +104,13 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_eip" "private" {
   count = local.nat_gateway_count
+
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.name_prefix}-nat-gateway-${count.index + 1}"
+    },
+  )
 }
 
 resource "aws_nat_gateway" "private" {
