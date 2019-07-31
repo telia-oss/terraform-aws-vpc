@@ -26,9 +26,9 @@ func TestModule(t *testing.T) {
 			expected: vpc.Expectations{
 				CIDRBlock: "10.0.0.0/16",
 				SubnetCIDRBlocks: map[string]bool{
-					"10.0.0.0/20":  true,
-					"10.0.16.0/20": true,
-					"10.0.32.0/20": true,
+					"10.0.0.0/26":   true,
+					"10.0.0.64/26":  true,
+					"10.0.0.128/26": true,
 				},
 				NATGatewayCount: 0,
 				AvailabilityZones: []string{
