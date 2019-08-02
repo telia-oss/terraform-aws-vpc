@@ -9,7 +9,6 @@ variable "name_prefix" {
 variable "cidr_block" {
   description = "The CIDR block for the VPC."
   type        = string
-  default     = "10.0.0.0/16"
 }
 
 variable "availability_zones" {
@@ -19,9 +18,9 @@ variable "availability_zones" {
 }
 
 variable "public_subnet_cidrs" {
-  description = "A list of CIDR blocks to use for the public subnets. When null, creates a single /20-prefixed subnet per AZ."
+  description = "A list of CIDR blocks to use for the public subnets."
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "private_subnet_cidrs" {

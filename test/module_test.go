@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	vpc "github.com/telia-oss/terraform-aws-vpc/test"
+	vpc "github.com/telia-oss/terraform-aws-vpc/v3/test"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -24,11 +24,11 @@ func TestModule(t *testing.T) {
 			name:        fmt.Sprintf("vpc-basic-test-%s", random.UniqueId()),
 			region:      "eu-west-1",
 			expected: vpc.Expectations{
-				CIDRBlock: "10.0.0.0/16",
+				CIDRBlock: "10.0.0.0/24",
 				SubnetCIDRBlocks: map[string]bool{
-					"10.0.0.0/20":  true,
-					"10.0.16.0/20": true,
-					"10.0.32.0/20": true,
+					"10.0.0.0/26":   true,
+					"10.0.0.64/26":  true,
+					"10.0.0.128/26": true,
 				},
 				NATGatewayCount: 0,
 				AvailabilityZones: []string{
