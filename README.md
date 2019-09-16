@@ -1,6 +1,6 @@
 ## VPC
 
-[![Build Status](https://travis-ci.com/telia-oss/terraform-aws-vpc.svg?branch=master)](https://travis-ci.com/telia-oss/terraform-aws-vpc)
+[![workflow](https://github.com/telia-oss/terraform-aws-vpc/workflows/workflow/badge.svg)](https://github.com/telia-oss/terraform-aws-vpc/actions)
 
 This is a module which simplifies setting up a new VPC and getting it into a useful state:
 
