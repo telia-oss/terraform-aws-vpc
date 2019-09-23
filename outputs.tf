@@ -6,6 +6,11 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
+output "cidr_block" {
+  description = "The cidr_block of the VPC."
+  value       = aws_vpc.main.cidr_block
+}
+
 output "public_subnet_ids" {
   description = "The ID of the public subnets."
   value       = aws_subnet.public[*].id
@@ -14,6 +19,11 @@ output "public_subnet_ids" {
 output "private_subnet_ids" {
   description = "The ID of the private subnets."
   value       = aws_subnet.private[*].id
+}
+
+output "main_route_table_id" {
+  description = "The ID of the main route table."
+  value       = aws_vpc.main.main_route_table_id
 }
 
 output "public_subnets_route_table_id" {
@@ -26,13 +36,7 @@ output "private_subnets_route_table_ids" {
   value       = aws_route_table.private[*].id
 }
 
-output "main_route_table_id" {
-  description = "The ID of the main route table."
-  value       = aws_vpc.main.main_route_table_id
+output "nat_gateway_ids" {
+  description = "The IDs of the NAT Gateways."
+  value       = aws_nat_gateway.private[*].id
 }
-
-output "cidr_block" {
-  description = "The cidr_block of the VPC."
-  value       = aws_vpc.main.cidr_block
-}
-
