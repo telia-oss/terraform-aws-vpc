@@ -37,7 +37,7 @@ resource "aws_internet_gateway" "public" {
 }
 
 resource "aws_egress_only_internet_gateway" "outbound" {
-  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = local.nat_gateway_count
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 }
