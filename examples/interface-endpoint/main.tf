@@ -29,39 +29,41 @@ module "vpc" {
 }
 
 resource "aws_vpc_endpoint" "ssm" {
-  service_name       = "com.amazonaws.${var.region}.ssm"
-  vpc_id             = module.vpc.vpc_id
-  subnet_ids         = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [module.vpc.default_security_group_id]
-  tags               = local.tags
+  service_name        = "com.amazonaws.${var.region}.ssm"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [module.vpc.default_security_group_id]
+  tags                = local.tags
   private_dns_enabled = true
 }
 
 resource "aws_vpc_endpoint" "ssmmessages" {
-  service_name       = "com.amazonaws.${var.region}.ssmmessages"
-  vpc_id             = module.vpc.vpc_id
-  subnet_ids         = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [module.vpc.default_security_group_id]
-  tags               = local.tags
+  service_name        = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [module.vpc.default_security_group_id]
+  tags                = local.tags
   private_dns_enabled = true
 }
+
 resource "aws_vpc_endpoint" "ec2" {
-  service_name       = "com.amazonaws.${var.region}.ec2"
-  vpc_id             = module.vpc.vpc_id
-  subnet_ids         = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [module.vpc.default_security_group_id]
-  tags               = local.tags
+  service_name        = "com.amazonaws.${var.region}.ec2"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [module.vpc.default_security_group_id]
+  tags                = local.tags
   private_dns_enabled = true
 }
+
 resource "aws_vpc_endpoint" "ec2messages" {
-  service_name       = "com.amazonaws.${var.region}.ec2messages"
-  vpc_id             = module.vpc.vpc_id
-  subnet_ids         = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
-  vpc_endpoint_type  = "Interface"
-  security_group_ids = [module.vpc.default_security_group_id]
-  tags               = local.tags
+  service_name        = "com.amazonaws.${var.region}.ec2messages"
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = compact(concat(module.vpc.private_subnet_ids, module.vpc.public_subnet_ids))
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [module.vpc.default_security_group_id]
+  tags                = local.tags
   private_dns_enabled = true
 }
