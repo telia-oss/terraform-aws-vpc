@@ -10,6 +10,7 @@ This is a module which simplifies setting up a new VPC and getting it into a use
 - Creates a NAT gateway for your private subnets if desired (requires public subnets).
 - Creates an egress only internet gateway for IPv6 traffic outbound from the private subnets.
 - Adds the tag `type` to each subnet with the value of either `public` or `private`.
+- Adds VPC Gateway Endpoints for s3 and dynamodb
 
 Note that, if `create_nat_gateways` is enabled, each private subnet has a route table which targets an individual NAT gateway when accessing
 the internet over IPv4, which means that all instances in a given private subnet will appear to have the same static IP from the outside.

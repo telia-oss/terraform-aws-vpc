@@ -36,3 +36,7 @@ output "cidr_block" {
   value       = aws_vpc.main.cidr_block
 }
 
+output "default_security_group_id" {
+  description = "The id of the VPC default security group"
+  value       = aws_vpc.main.default_security_group_id
+}
