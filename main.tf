@@ -90,7 +90,7 @@ resource "aws_subnet" "public" {
     var.tags,
     {
       "Name" = "${var.name_prefix}-public-subnet-${count.index + 1}"
-      "type" = "public"
+      "Tier" = "Public"
     },
   )
 }
@@ -177,7 +177,7 @@ resource "aws_subnet" "private" {
     var.tags,
     {
       "Name" = "${var.name_prefix}-private-subnet-${count.index + 1}"
-      "type" = "private"
+      "Tier" = "Private"
     },
   )
 }
