@@ -41,11 +41,6 @@ output "nat_gateway_ids" {
   value       = aws_nat_gateway.private[*].id
 }
 
-output "cidr_block" {
-  description = "The cidr_block of the VPC."
-  value       = aws_vpc.main.cidr_block
-}
-
 output "default_security_group_id" {
   description = "The id of the VPC default security group"
   value       = aws_vpc.main.default_security_group_id
