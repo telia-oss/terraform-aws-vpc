@@ -3,6 +3,8 @@
 # ------------------------------------------------------------------------------
 data "aws_availability_zones" "main" {}
 
+data "aws_region" "current" {}
+
 locals {
   azs               = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
   nat_gateway_count = var.create_nat_gateways ? min(length(local.azs), length(var.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
@@ -188,3 +190,14 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private[count.index].id
 }
 
+resource "aws_vpc_endpoint" "s3" {
+  service_name    = "com.amazonaws.${data.aws_region.current.name}.s3"
+  vpc_id          = aws_vpc.main.id
+  route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+}
+
+resource "aws_vpc_endpoint" "dynamodb" {
+  service_name    = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
+  vpc_id          = aws_vpc.main.id
+  route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+}
