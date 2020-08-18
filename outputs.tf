@@ -45,3 +45,4 @@ output "default_security_group_id" {
   description = "The id of the VPC default security group"
   value       = aws_vpc.main.default_security_group_id
 }
+
