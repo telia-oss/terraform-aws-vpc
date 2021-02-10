@@ -1,6 +1,6 @@
 provider "aws" {
   #version = ">= 3.27" ##This is moved to required_providers block on TF 0.14
-  region  = var.region
+  region = var.region
 }
 
 data "aws_availability_zones" "main" {}
