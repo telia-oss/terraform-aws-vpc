@@ -1,5 +1,5 @@
 provider "aws" {
-  version = ">= 2.17"
+  #version = ">= 3.27" ##This is moved to required_providers block on TF 0.14
   region  = var.region
 }
 
