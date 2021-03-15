@@ -194,10 +194,12 @@ resource "aws_vpc_endpoint" "s3" {
   service_name    = "com.amazonaws.${data.aws_region.current.name}.s3"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+  policy          = var.s3_endpoint_policy
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
   service_name    = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+  policy          = var.dynamodb_endpoint_policy
 }

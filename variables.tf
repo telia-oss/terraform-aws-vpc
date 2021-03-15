@@ -59,3 +59,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "s3_endpoint_policy" {
+  description = "Policy document to attach to S3 Gateway Endpoint. Defaults to blank."
+  default     = null
+}
+
+variable "dynamodb_endpoint_policy" {
+  description = "Policy document to attach to DynamoDb Gateway Endpoint. Defaults to blank."
+  default     = null
+}
