@@ -83,7 +83,7 @@ resource "aws_subnet" "public" {
   count                           = length(var.public_subnet_cidrs)
   vpc_id                          = aws_vpc.main.id
   cidr_block                      = var.public_subnet_cidrs[count.index]
-  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index)
+  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, var.ipv6_public_subnet_netnum_offset + count.index)
   availability_zone               = element(local.azs, count.index)
   map_public_ip_on_launch         = true
   assign_ipv6_address_on_creation = true
@@ -170,7 +170,7 @@ resource "aws_subnet" "private" {
   count                           = length(var.private_subnet_cidrs)
   vpc_id                          = aws_vpc.main.id
   cidr_block                      = var.private_subnet_cidrs[count.index]
-  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index + length(var.public_subnet_cidrs))
+  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index + (var.ipv6_private_subnet_netnum_offset == -1 ? length(var.public_subnet_cidrs) : var.ipv6_private_subnet_netnum_offset))
   availability_zone               = element(local.azs, count.index)
   map_public_ip_on_launch         = false
   assign_ipv6_address_on_creation = true
@@ -194,10 +194,12 @@ resource "aws_vpc_endpoint" "s3" {
   service_name    = "com.amazonaws.${data.aws_region.current.name}.s3"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+  policy          = var.s3_endpoint_policy
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
   service_name    = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
+  policy          = var.dynamodb_endpoint_policy
 }
