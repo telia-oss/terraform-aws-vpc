@@ -59,12 +59,15 @@ variable "tags" {
   default     = {}
 }
 
-variable "s3_endpoint_policy" {
-  description = "Policy document to attach to S3 Gateway Endpoint. Defaults to blank."
-  default     = null
-}
-
-variable "dynamodb_endpoint_policy" {
-  description = "Policy document to attach to DynamoDb Gateway Endpoint. Defaults to blank."
-  default     = null
+variable "endpoint_map" {
+  description = "Map configuration for aws_vpc_endpoint."
+  type        = map(any)
+  default = {
+    s3 = {
+      endpoint_policy = null
+    },
+    dynamodb = {
+      endpoint_policy = null
+    }
+  }
 }

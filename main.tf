@@ -190,16 +190,13 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private[count.index].id
 }
 
-resource "aws_vpc_endpoint" "s3" {
-  service_name    = "com.amazonaws.${data.aws_region.current.name}.s3"
+resource "aws_vpc_endpoint" "endpoint" {
+  for_each        = var.endpoint_map
+  service_name    = "com.amazonaws.${data.aws_region.current.name}.${each.key}"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
-  policy          = var.s3_endpoint_policy
-}
-
-resource "aws_vpc_endpoint" "dynamodb" {
-  service_name    = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
-  vpc_id          = aws_vpc.main.id
-  route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
-  policy          = var.dynamodb_endpoint_policy
+  policy          = each.value.endpoint_policy
+  tags = {
+    "Name" = each.key
+  }
 }
