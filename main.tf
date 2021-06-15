@@ -195,6 +195,12 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
   policy          = var.s3_endpoint_policy
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.name_prefix}-s3"
+    },
+  )
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
@@ -202,4 +208,10 @@ resource "aws_vpc_endpoint" "dynamodb" {
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
   policy          = var.dynamodb_endpoint_policy
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.name_prefix}-dynamodb"
+    },
+  )
 }
