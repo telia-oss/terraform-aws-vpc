@@ -191,6 +191,7 @@ resource "aws_route_table_association" "private" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
+  count           = var.enable_vpc_endpoints ? 1 : 0
   service_name    = "com.amazonaws.${data.aws_region.current.name}.s3"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))
@@ -204,6 +205,7 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
+  count           = var.enable_vpc_endpoints ? 1 : 0
   service_name    = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
   vpc_id          = aws_vpc.main.id
   route_table_ids = compact(concat(aws_route_table.private.*.id, aws_route_table.public.*.id))

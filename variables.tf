@@ -68,3 +68,8 @@ variable "dynamodb_endpoint_policy" {
   description = "Policy document to attach to DynamoDb Gateway Endpoint. Defaults to blank."
   default     = null
 }
+
+variable "enable_vpc_endpoints" {
+  description = "Enable or disable VPC endpoints"
+  default     = true
+}
