@@ -41,6 +41,18 @@ variable "ipv6_private_subnet_netnum_offset" {
   default     = -1
 }
 
+variable "map_public_ip_on_launch" {
+  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address. Default is true."
+  type        = string
+  default     = true
+}
+
+variable "map_customer_owned_ip_on_launch" {
+  description = "Specify true to indicate that network interfaces created in the subnet should be assigned a customer owned IP address. Default is false"
+  type        = string
+  default     = false
+}
+
 variable "create_nat_gateways" {
   description = "Optionally create NAT gateways (which cost $) to provide internet connectivity to the private subnets."
   type        = bool
