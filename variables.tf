@@ -53,6 +53,18 @@ variable "create_nat_gateways" {
   default     = true
 }
 
+variable "create_internet_gateway" {
+  description = "Optionaly create an Internet Gateway resource"
+  type        = bool
+  default     = true
+}
+
+variable "create_egress_only_internet_gateway" {
+  description = "Optionaly create an Egress Only Internet Gateway resource"
+  type        = bool
+  default     = true
+}
+
 variable "enable_dns_hostnames" {
   description = "A boolean flag to enable/disable DNS hostnames in the VPC."
   type        = bool

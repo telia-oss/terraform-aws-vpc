@@ -8,6 +8,9 @@ data "aws_region" "current" {}
 locals {
   azs               = length(var.availability_zones) > 0 ? var.availability_zones : data.aws_availability_zones.main.names
   nat_gateway_count = var.create_nat_gateways ? min(length(local.azs), length(var.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
+
+  internet_gateway_count             = (var.create_internet_gateway && length(var.public_subnet_cidrs)) > 0 ? 1 : 0
+  egress_only_internet_gateway_count = (var.create_egress_only_internet_gateway && length(var.public_subnet_cidrs)) > 0 ? 1 : 0
 }
 
 resource "aws_vpc" "main" {
@@ -26,7 +29,7 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_internet_gateway" "public" {
-  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = local.internet_gateway_count
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 
@@ -39,7 +42,7 @@ resource "aws_internet_gateway" "public" {
 }
 
 resource "aws_egress_only_internet_gateway" "outbound" {
-  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = local.egress_only_internet_gateway_count
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 }
@@ -58,7 +61,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "public" {
-  count = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count = local.internet_gateway_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
@@ -69,7 +72,7 @@ resource "aws_route" "public" {
 }
 
 resource "aws_route" "ipv6-public" {
-  count = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count = local.internet_gateway_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
