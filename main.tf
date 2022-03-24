@@ -10,7 +10,7 @@ locals {
   nat_gateway_count = var.create_nat_gateways ? min(length(local.azs), length(var.public_subnet_cidrs), length(var.private_subnet_cidrs)) : 0
 
   internet_gateway_count             = (var.create_internet_gateway && length(var.public_subnet_cidrs) > 0) ? 1 : 0
-  egress_only_internet_gateway_count = (var.create_egress_only_internet_gateway && length(var.public_subnet_cidrs) > 0) ? 1 : 0
+  egress_only_internet_gateway_count = (var.create_egress_only_internet_gateway && length(var.private_subnet_cidrs) > 0) ? 1 : 0
 }
 
 resource "aws_vpc" "main" {
@@ -163,7 +163,7 @@ resource "aws_route" "ipv6-private" {
     aws_egress_only_internet_gateway.outbound,
     aws_route_table.private,
   ]
-  count                       = length(var.public_subnet_cidrs) > 0 ? length(var.private_subnet_cidrs) : 0
+  count                       = length(var.private_subnet_cidrs) > 0 ? length(var.private_subnet_cidrs) : 0
   route_table_id              = aws_route_table.private[count.index].id
   egress_only_gateway_id      = aws_egress_only_internet_gateway.outbound[0].id
   destination_ipv6_cidr_block = "::/0"
