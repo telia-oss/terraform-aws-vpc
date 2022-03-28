@@ -163,7 +163,7 @@ resource "aws_route" "ipv6-private" {
     aws_egress_only_internet_gateway.outbound,
     aws_route_table.private,
   ]
-  count                       = length(var.private_subnet_cidrs) > 0 ? length(var.private_subnet_cidrs) : 0
+  count                       = length(var.private_subnet_cidrs) > 0 && local.egress_only_internet_gateway_count > 0 ? length(var.private_subnet_cidrs) : 0
   route_table_id              = aws_route_table.private[count.index].id
   egress_only_gateway_id      = aws_egress_only_internet_gateway.outbound[0].id
   destination_ipv6_cidr_block = "::/0"
