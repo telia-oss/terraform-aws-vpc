@@ -1,6 +1,6 @@
 variable "name_prefix" {
   type    = string
-  default = "vpc-basic-example"
+  default = "vpc-complete-example"
 }
 
 variable "region" {

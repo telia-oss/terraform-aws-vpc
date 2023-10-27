@@ -1,20 +1,53 @@
-## VPC
+# AWS VPC Terraform Module
 
-[![workflow](https://github.com/telia-oss/terraform-aws-vpc/workflows/workflow/badge.svg)](https://github.com/telia-oss/terraform-aws-vpc/actions)
+This Terraform module provisions a fully featured VPC on AWS, supporting both IPv4 and IPv6, public and private subnets, NAT gateways, route tables, and more.
 
-This is a module which simplifies setting up a new VPC and getting it into a useful state:
+## Main Features
 
-- Sets up the route tables for the public and private subnets you specify.
-- Enables IPv6 for the VPC and allocates a /64 block for each of the public and private subnets.
-- Creates up an internet gateway and route table for your public subnets.
-- Creates a NAT gateway for your private subnets if desired (requires public subnets).
-- Creates an egress only internet gateway for IPv6 traffic outbound from the private subnets.
-- Adds the tag `type` to each subnet with the value of either `public` or `private`.
-- Adds VPC Gateway Endpoints for s3 and dynamodb
+- Supports both IPv4 and IPv6
+- Provisions public and private subnets
+- Optional NAT gateways for outbound internet connectivity
+- Configurable internet and egress-only gateways
+- Route tables and associations
+- IPAM integration for dynamic CIDR allocation
 
-Note that, if `create_nat_gateways` is enabled, each private subnet has a route table which targets an individual NAT gateway when accessing
-the internet over IPv4, which means that all instances in a given private subnet will appear to have the same static IP from the outside.
+## Usage
 
-Note: if you already have a VPC setup with private subnets, and later add public subnets, your private subnet needs to be recreated due to how this module originally assigned IPv6 addresses.
-This can be avoided by setting the variables `ipv6_private_subnet_netnum_offset = 0` & `ipv6_public_subnet_netnum_offset = 128` which will force private subnets to still be allocated from 0, and public subnets from an offset.
-The maximum value of subnets in a IPv6 CIDR block is 255, we get a /56 from AWS and we divide them into /64 which gives us 8 bits for subnets. Hence 128 will allow 128 private subnets, and 128 public ones.
+```hcl
+module "vpc" {
+  source                              = ""../..""
+  name_prefix                         = "vpc_name"
+  create_nat_gateways                 = true
+  create_internet_gateway             = true
+  create_egress_only_internet_gateway = true
+  ipam_pool                           = "cloud-only"
+  vpc_netmask_ipam                    = 24
+  tags                                = { Environment = "dev" }
+  ...
+}
+```
+## Inputs
+
+### Core Variables
+
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| `name_prefix` | A prefix used for naming resources. | `string` | `-` |
+| `cidr_block` | The CIDR block for the VPC. If not set, it will get CIDR from IPAM. | `string` | `null` |
+| `public_subnet_cidrs` | List of CIDR blocks for public subnets. If not provided, relies on IPAM. | `list(string)` | `[]` |
+| `private_subnet_cidrs` | List of CIDR blocks for private subnets. If not provided, relies on IPAM. | `list(string)` | `[]` |
+| `availability_zones` | Availability zones to use for subnets and resources. Uses all AZs in the region by default. | `list(string)` | `[]` |
+| `map_public_ip_on_launch` | Whether instances in the subnet receive public IP addresses. | `bool` | `true` |
+| `create_nat_gateways` | Whether to create NAT gateways. | `bool` | `true` |
+| `create_internet_gateway` | Whether to create an internet gateway. | `bool` | `true` |
+| `create_egress_only_internet_gateway` | Whether to create an egress-only internet gateway. | `bool` | `true` |
+| `enable_dns_hostnames` | Enable/disable DNS hostnames in the VPC. | `bool` | `false` |
+| `tags` | A map of tags to add to all resources. | `map(string)` | `{}` |
+
+## IPAM-Related Variables
+
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| `ipam_subnet_newbits` | Number of additional bits with which to extend the prefix. See variable description for details. | `number` | `3` |
+| `vpc_netmask_ipam` | The netmask to request from IPAM for your VPC. | `number` | `25` |
+| `ipam_pool` | The IPAM pool to use for the VPC's primary CIDR. | `string` | `null` |
