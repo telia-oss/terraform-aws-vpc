@@ -6,6 +6,10 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
+output "name" {
+  value = aws_vpc.main.tags["Name"]
+}
+
 output "cidr_block" {
   description = "The cidr_block of the VPC."
   value       = aws_vpc.main.cidr_block
