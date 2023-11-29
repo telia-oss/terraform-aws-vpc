@@ -91,3 +91,8 @@ variable "enable_vpc_endpoints" {
   description = "Enable or disable VPC endpoints"
   default     = true
 }
+
+variable "manual_public_subnet_routing" {
+  description = "Create a separate route table for each public subnet"
+  default     = false
+}

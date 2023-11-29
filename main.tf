@@ -48,14 +48,14 @@ resource "aws_egress_only_internet_gateway" "outbound" {
 }
 
 resource "aws_route_table" "public" {
-  count      = length(var.public_subnet_cidrs) > 0 ? 1 : 0
+  count      = var.manual_public_subnet_routing ? length(var.public_subnet_cidrs) : (length(var.public_subnet_cidrs) > 0 ? 1 : 0)
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 
   tags = merge(
     var.tags,
     {
-      "Name" = "${var.name_prefix}-public-rt"
+      "Name" = var.manual_public_subnet_routing ? "${var.name_prefix}-public-rt-${count.index + 1}" : "${var.name_prefix}-public-rt"
     },
   )
 }

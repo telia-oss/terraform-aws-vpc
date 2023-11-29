@@ -35,6 +35,11 @@ output "public_subnets_route_table_id" {
   value       = concat(aws_route_table.public[*].id, [""])[0]
 }
 
+output "public_subnets_route_table_ids" {
+  description = "The IDs of the routing table for the public subnets."
+  value       = aws_route_table.public[*].id
+}
+
 output "private_subnets_route_table_ids" {
   description = "The IDs of the routing tables for the private subnets."
   value       = aws_route_table.private[*].id
