@@ -54,13 +54,13 @@ variable "create_nat_gateways" {
 }
 
 variable "create_internet_gateway" {
-  description = "Optionaly create an Internet Gateway resource"
+  description = "Optionally create an Internet Gateway resource"
   type        = bool
   default     = true
 }
 
 variable "create_egress_only_internet_gateway" {
-  description = "Optionaly create an Egress Only Internet Gateway resource"
+  description = "Optionally create an Egress Only Internet Gateway resource"
   type        = bool
   default     = true
 }
