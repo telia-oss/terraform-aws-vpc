@@ -48,36 +48,36 @@ resource "aws_egress_only_internet_gateway" "outbound" {
 }
 
 resource "aws_route_table" "public" {
-  count      = var.manual_public_subnet_routing ? length(var.public_subnet_cidrs) : (length(var.public_subnet_cidrs) > 0 ? 1 : 0)
+  count      = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : (length(var.public_subnet_cidrs) > 0 ? 1 : 0)
   depends_on = [aws_vpc.main]
   vpc_id     = aws_vpc.main.id
 
   tags = merge(
     var.tags,
     {
-      "Name" = var.manual_public_subnet_routing ? "${var.name_prefix}-public-rt-${count.index + 1}" : "${var.name_prefix}-public-rt"
+      "Name" = var.individual_public_subnet_routing ? "${var.name_prefix}-public-rt-${count.index + 1}" : "${var.name_prefix}-public-rt"
     },
   )
 }
 
 resource "aws_route" "public" {
-  count = var.manual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
+  count = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
   ]
-  route_table_id         = var.manual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id         = var.individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
   gateway_id             = aws_internet_gateway.public[0].id
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route" "ipv6-public" {
-  count = var.manual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
+  count = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
   ]
-  route_table_id              = var.manual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id              = var.individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
   gateway_id                  = aws_internet_gateway.public[0].id
   destination_ipv6_cidr_block = "::/0"
 }
@@ -103,7 +103,7 @@ resource "aws_subnet" "public" {
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnet_cidrs)
   subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = var.manual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id = var.individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
 }
 
 resource "aws_eip" "private" {
