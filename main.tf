@@ -11,6 +11,7 @@ locals {
 
   internet_gateway_count             = (var.create_internet_gateway && length(var.public_subnet_cidrs) > 0) ? 1 : 0
   egress_only_internet_gateway_count = (var.create_egress_only_internet_gateway && length(var.private_subnet_cidrs) > 0) ? 1 : 0
+  public_route_count                 = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
 }
 
 resource "aws_vpc" "main" {
@@ -61,23 +62,23 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route" "public" {
-  count = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
+  count = local.public_route_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
   ]
-  route_table_id         = var.individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id         = aws_route_table.public[count.index].id
   gateway_id             = aws_internet_gateway.public[0].id
   destination_cidr_block = "0.0.0.0/0"
 }
 
 resource "aws_route" "ipv6-public" {
-  count = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
+  count = local.public_route_count
   depends_on = [
     aws_internet_gateway.public,
     aws_route_table.public,
   ]
-  route_table_id              = var.individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id              = aws_route_table.public[count.index].id
   gateway_id                  = aws_internet_gateway.public[0].id
   destination_ipv6_cidr_block = "::/0"
 }
