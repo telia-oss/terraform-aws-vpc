@@ -59,6 +59,12 @@ variable "create_internet_gateway" {
   default     = true
 }
 
+variable "skip_internet_gateway_routing" {
+  description = "Optionally do not include any public subnet routing, for manual configuration"
+  type        = bool
+  default     = false
+}
+
 variable "create_egress_only_internet_gateway" {
   description = "Optionally create an Egress Only Internet Gateway resource"
   type        = bool

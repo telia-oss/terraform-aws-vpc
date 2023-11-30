@@ -11,7 +11,7 @@ locals {
 
   internet_gateway_count             = (var.create_internet_gateway && length(var.public_subnet_cidrs) > 0) ? 1 : 0
   egress_only_internet_gateway_count = (var.create_egress_only_internet_gateway && length(var.private_subnet_cidrs) > 0) ? 1 : 0
-  public_route_count                 = var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
+  public_route_count                 = var.skip_internet_gateway_routing ? 0 : var.individual_public_subnet_routing ? length(var.public_subnet_cidrs) : local.internet_gateway_count
 }
 
 resource "aws_vpc" "main" {
