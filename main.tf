@@ -105,7 +105,7 @@ resource "aws_subnet" "public" {
 resource "aws_route_table_association" "public" {
   count          = length(var.public_subnet_cidrs)
   subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = var.create_individual_public_subnet_routing ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
+  route_table_id = var.create_public_subnet_default_routes ? aws_route_table.public[count.index].id : aws_route_table.public[0].id
 }
 
 resource "aws_eip" "private" {
