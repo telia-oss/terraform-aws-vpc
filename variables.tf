@@ -54,13 +54,13 @@ variable "create_nat_gateways" {
 }
 
 variable "create_internet_gateway" {
-  description = "Optionaly create an Internet Gateway resource"
+  description = "Optionally create an Internet Gateway resource"
   type        = bool
   default     = true
 }
 
 variable "create_egress_only_internet_gateway" {
-  description = "Optionaly create an Egress Only Internet Gateway resource"
+  description = "Optionally create an Egress Only Internet Gateway resource"
   type        = bool
   default     = true
 }
@@ -89,5 +89,16 @@ variable "dynamodb_endpoint_policy" {
 
 variable "enable_vpc_endpoints" {
   description = "Enable or disable VPC endpoints"
+  default     = true
+}
+
+variable "create_individual_public_subnet_route_tables" {
+  description = "Create a separate route table for each public subnet."
+  default     = false
+}
+
+variable "create_public_subnet_default_routes" {
+  description = "Create public subnet default routes for IPv4 and IPv6, or not for manual configuration."
+  type        = bool
   default     = true
 }
