@@ -25,6 +25,18 @@ output "private_subnet_ids" {
   value       = aws_subnet.private[*].id
 }
 
+output "private_subnets" {
+  description = "The private subnets."
+  value = [
+    for subnet in aws_subnet.private : {
+      id                   = subnet.id
+      cidr_block           = subnet.cidr_block
+      availability_zone    = subnet.availability_zone
+      availability_zone_id = subnet.availability_zone_id
+    }
+  ]
+}
+
 output "main_route_table_id" {
   description = "The ID of the main route table."
   value       = aws_vpc.main.main_route_table_id
