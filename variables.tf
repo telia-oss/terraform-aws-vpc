@@ -77,6 +77,18 @@ variable "tags" {
   default     = {}
 }
 
+variable "public_subnet_tags" {
+  description = "Additional tags to apply to public subnets."
+  type        = map(string)
+  default     = {}
+}
+
+variable "private_subnet_tags" {
+  description = "Additional tags to apply to private subnets."
+  type        = map(string)
+  default     = {}
+}
+
 variable "s3_endpoint_policy" {
   description = "Policy document to attach to S3 Gateway Endpoint. Defaults to blank."
   default     = null

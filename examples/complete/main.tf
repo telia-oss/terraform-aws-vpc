@@ -36,4 +36,17 @@ module "vpc" {
     terraform   = "True"
     environment = "dev"
   }
+
+  public_subnet_tags = {
+    Type                               = "public"
+    "kubernetes.io/role/elb"           = "1"
+    "kubernetes.io/cluster/my-cluster" = "shared"
+  }
+
+  private_subnet_tags = {
+    Type                               = "private"
+    "kubernetes.io/role/internal-elb"  = "1"
+    "kubernetes.io/cluster/my-cluster" = "shared"
+    DatabaseTier                       = "true"
+  }
 }
