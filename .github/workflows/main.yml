@@ -28,7 +28,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: '1.12.2'
+          terraform_version: '1.5.7'
 
       - name: Set up Task
         uses: go-task/setup-task@v0
